@@ -10,7 +10,7 @@ import com.matan.blog.blog.model.User;
 import com.matan.blog.blog.repository.PostRepository;
 import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +44,8 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
-        return postRepository.findAll().stream().map(postMapper::mapToResponse).collect(Collectors.toList());
+        //TODO: add path variable in the post controller
+        return postRepository.findAll(PageRequest.of(0, 20)).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
