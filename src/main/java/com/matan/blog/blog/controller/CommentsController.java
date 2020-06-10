@@ -2,13 +2,11 @@ package com.matan.blog.blog.controller;
 
 import com.matan.blog.blog.dto.CommentsRequest;
 import com.matan.blog.blog.service.CommentService;
+import com.matan.blog.blog.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/comments/")
@@ -21,4 +19,5 @@ public class CommentsController {
         commentService.createComment(commentsRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
 }

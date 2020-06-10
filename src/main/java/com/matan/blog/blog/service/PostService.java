@@ -11,11 +11,14 @@ import com.matan.blog.blog.repository.PostRepository;
 import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +30,7 @@ public class PostService {
 
     @Transactional
     public void save(PostRequest postRequest) {
-        User user = userRepository.findByEmail(postRequest.getUserEmail()).orElseThrow(()->new UserNotFoundException("No user Found with email : " + postRequest.getUserEmail()));
+        User user = userRepository.findByEmail(postRequest.getUserEmail()).orElseThrow(() -> new UserNotFoundException("No user Found with email : " + postRequest.getUserEmail()));
 
         Post post = postMapper.map(postRequest);
         post.setUserName(user.getUsername());
@@ -43,9 +46,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getAllPosts() {
-        //TODO: add path variable in the post controller
-        return postRepository.findAll(PageRequest.of(0, 20)).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
+    public List<PostResponse> getAllPosts(int page) {
+        return postRepository.findAll(PageRequest.of(page, 20)).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -55,10 +57,22 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getPostsByUsername(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("No user Found with email : " + email));
-        if(user.getPosts() != null)
-            return user.getPosts().stream().map(postMapper::mapToResponse).collect(Collectors.toList());
-        return null;
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        return userRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    public Boolean CreatedByUser(String id) {
+        User currentUser = getCurrentUser();
+        if (currentUser.getPosts() == null || currentUser.getPosts().size() == 0) {
+            return false;
+        }
+        for (Post temp : currentUser.getPosts()) {
+            if (temp.get_id().equals(id))
+                return true;
+        }
+        return false;
     }
 }

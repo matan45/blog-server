@@ -30,4 +30,5 @@ public class PostResponse {
     private LocalDateTime editDate;
     @Nullable
     private List<Comment> comments;
+
 }
