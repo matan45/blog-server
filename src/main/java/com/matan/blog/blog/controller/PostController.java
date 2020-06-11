@@ -33,5 +33,5 @@ public class PostController {
     public ResponseEntity<PostResponse> getPost(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPost(id));
     }
-//TODO: PUT AND DELETE post
+//TODO: PUT  post
 }

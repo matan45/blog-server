@@ -27,6 +27,7 @@ public class PostService {
     private final PostMapper postMapper;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
 
     @Transactional
     public void save(PostRequest postRequest) {
@@ -56,23 +57,28 @@ public class PostService {
         return postMapper.mapToResponse(post);
     }
 
-    @Transactional(readOnly = true)
-    public User getCurrentUser() {
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
-        return userRepository.findByEmail(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
-    }
 
     public Boolean CreatedByUser(String id) {
-        User currentUser = getCurrentUser();
-        if (currentUser.getPosts() == null || currentUser.getPosts().size() == 0) {
-            return false;
-        }
-        for (Post temp : currentUser.getPosts()) {
-            if (temp.get_id().equals(id))
-                return true;
+        User currentUser = authService.getCurrentUser();
+        if (currentUser.getPosts() != null && currentUser.getPosts().size() > 0) {
+            for (Post temp : currentUser.getPosts()) {
+                if (temp.get_id().equals(id))
+                    return true;
+            }
         }
         return false;
+    }
+
+    public void deletePostById(String id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("post not fined whit that id: " + id));
+        User user = authService.getCurrentUser();
+        if (post != null && user.getPosts() != null) {
+            List<Post> list = user.getPosts();
+            list.remove(post);
+            user.setPosts(list);
+            postRepository.delete(post);
+            userRepository.save(user);
+        }
+
     }
 }
