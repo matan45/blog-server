@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentMapper commentMapper;

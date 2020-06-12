@@ -18,11 +18,6 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
-        postService.save(postRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
     @GetMapping("query/all/{page}")
     public ResponseEntity<List<PostResponse>> getAllPosts(@PathVariable("page") int page) {
@@ -33,5 +28,5 @@ public class PostController {
     public ResponseEntity<PostResponse> getPost(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPost(id));
     }
-//TODO: PUT  post
+
 }

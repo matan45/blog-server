@@ -23,5 +23,5 @@ public class Comment {
     @NotNull
     private String userName;
     @NotNull
-    private LocalDateTime createdDate;
+    private String createdDate;
 }

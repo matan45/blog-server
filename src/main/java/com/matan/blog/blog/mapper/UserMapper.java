@@ -16,7 +16,7 @@ public abstract class UserMapper {
     protected final PasswordEncoder passwordEncoder = null;
 
     @Mapping(target = "_id", ignore = true)
-    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "created", expression = "java(registerRequest.getCreated())")
     @Mapping(target = "username", expression = "java(registerRequest.getUsername())")
     @Mapping(target = "email", expression = "java(registerRequest.getEmail())")
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(registerRequest.getPassword()))")

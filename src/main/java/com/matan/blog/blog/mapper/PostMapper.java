@@ -1,5 +1,6 @@
 package com.matan.blog.blog.mapper;
 
+import com.matan.blog.blog.dto.EditPostRequest;
 import com.matan.blog.blog.dto.PostRequest;
 import com.matan.blog.blog.dto.PostResponse;
 import com.matan.blog.blog.model.Post;
@@ -10,7 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
     @Mapping(target = "_id", ignore = true)
-    @Mapping(target = "createdDate", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "createdDate", expression = "java(postDto.getCreatedDate())")
     @Mapping(target = "postTitle", expression = "java(postDto.getPostTitle())")
     @Mapping(target = "description", expression = "java(postDto.getDescription())")
     Post map(PostRequest postDto);
@@ -23,5 +24,12 @@ public interface PostMapper {
     @Mapping(target = "editDate", expression = "java(post.getEditDate())")
     @Mapping(target = "comments", expression = "java(post.getComments())")
     PostResponse mapToResponse(Post post);
+
+    @Mapping(target = "_id", expression = "java(postDto.getPostId())")
+    @Mapping(target = "editDate", expression = "java(postDto.getEditDate())")
+    @Mapping(target = "postTitle", expression = "java(postDto.getPostTitle())")
+    @Mapping(target = "description", expression = "java(postDto.getDescription())")
+    @Mapping(target = "comments", expression = "java(oldPost.getComments())")
+    Post mapEdit(EditPostRequest postDto,Post oldPost);
 
 }

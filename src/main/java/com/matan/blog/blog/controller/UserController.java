@@ -1,5 +1,8 @@
 package com.matan.blog.blog.controller;
 
+import com.matan.blog.blog.dto.EditPostRequest;
+import com.matan.blog.blog.dto.PostRequest;
+import com.matan.blog.blog.dto.PostResponse;
 import com.matan.blog.blog.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final PostService postService;
 
+    @PostMapping
+    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
+        postService.save(postRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @GetMapping("byUser/{id}")
     public ResponseEntity<Boolean> isCreatedByUser(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.CreatedByUser(id));
@@ -20,5 +29,11 @@ public class UserController {
     @DeleteMapping("delete/post")
     public void DeletePost(@RequestParam("postId") String id) {
         postService.deletePostById(id);
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity<Void> EditPost(@RequestBody EditPostRequest editPostRequest) {
+        postService.editPost(editPostRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

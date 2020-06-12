@@ -30,10 +30,10 @@ public class Post {
     private String description;
 
     @NotNull
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     @Nullable
-    private LocalDateTime editDate;
+    private String editDate;
 
     @Nullable
     private List<Comment> comments;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +19,6 @@ public class RegisterRequest {
     private String email;
     @NotBlank
     private String password;
+    @NotBlank
+    private String created;
 }

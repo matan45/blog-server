@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +19,6 @@ public class CommentsRequest {
     private String text;
     @NotBlank
     private String userName;
+    @NotNull
+    private String createDate;
 }
