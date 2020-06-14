@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class User {
     private String created;
 
     private List<String> authorities;
+
+    @PositiveOrZero
+    private int commentsNumber;
 
     @Nullable
     private List<Post> posts;

@@ -1,11 +1,9 @@
 package com.matan.blog.blog.service;
 
-import com.matan.blog.blog.dto.AuthenticationResponse;
-import com.matan.blog.blog.dto.LoginRequest;
-import com.matan.blog.blog.dto.RefreshTokenRequest;
-import com.matan.blog.blog.dto.RegisterRequest;
+import com.matan.blog.blog.dto.*;
 import com.matan.blog.blog.exception.UserAlreadyExistsException;
 import com.matan.blog.blog.exception.UserNotFoundException;
+import com.matan.blog.blog.mapper.PostMapper;
 import com.matan.blog.blog.mapper.UserMapper;
 import com.matan.blog.blog.model.User;
 import com.matan.blog.blog.repository.UserRepository;
@@ -42,7 +40,6 @@ public class AuthService {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
         user.setAuthorities(authorities);
-
         userRepository.save(user);
     }
 
@@ -50,7 +47,7 @@ public class AuthService {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        User user=userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()-> new UserNotFoundException("No user Found with email : " + loginRequest.getEmail()));
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new UserNotFoundException("No user Found with email : " + loginRequest.getEmail()));
         String Token = jwtProvider.generateToken(authenticate);
         return AuthenticationResponse.builder().authenticationToken(Token)
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
@@ -73,5 +70,12 @@ public class AuthService {
                 .getContext().getAuthentication().getPrincipal();
         return userRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    public UserResponse userDetails() {
+        User user = getCurrentUser();
+        if(user.getPosts()==null)
+            user.setPosts(new ArrayList<>());
+        return userMapper.mapToResponse(user);
     }
 }
