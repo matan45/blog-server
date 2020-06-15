@@ -72,10 +72,5 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
 
-    public UserResponse userDetails() {
-        User user = getCurrentUser();
-        if(user.getPosts()==null)
-            user.setPosts(new ArrayList<>());
-        return userMapper.mapToResponse(user);
-    }
+
 }

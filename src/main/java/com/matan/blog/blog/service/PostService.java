@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class PostService {
     private final PostMapper postMapper;
     private final PostRepository postRepository;
@@ -31,7 +30,6 @@ public class PostService {
     @Transactional
     public void save(PostRequest postRequest) {
         User user = authService.getCurrentUser();
-        log.info(postRequest.getCreatedDate().toString());
         Post post = postMapper.map(postRequest);
         post.setUserName(user.getUsername());
         postRepository.save(post);
@@ -56,17 +54,6 @@ public class PostService {
         return postMapper.mapToResponse(post);
     }
 
-
-    public Boolean CreatedByUser(String id) {
-        User currentUser = authService.getCurrentUser();
-        if (currentUser.getPosts() != null && currentUser.getPosts().size() > 0) {
-            for (Post temp : currentUser.getPosts()) {
-                if (temp.get_id().equals(id))
-                    return true;
-            }
-        }
-        return false;
-    }
 
     @Transactional
     public void deletePostById(String id) {
