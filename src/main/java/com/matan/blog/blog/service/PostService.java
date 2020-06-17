@@ -75,9 +75,15 @@ public class PostService {
         Post editPost = postMapper.mapEdit(editPostRequest, oldPost);
 
         List<Post> list = user.getPosts();
-        assert list != null;
-        list.remove(oldPost);
-        list.add(editPost);
+        if(list!= null){
+            for (int i=0;i<list.size();i++){
+                if(list.get(i).get_id().equals(oldPost.get_id())){
+                    list.set(i,editPost);
+                    break;
+                }
+            }
+        }
+
         user.setPosts(list);
         postRepository.save(editPost);
         userRepository.save(user);

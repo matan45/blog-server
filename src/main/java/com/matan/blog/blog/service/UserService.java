@@ -1,6 +1,7 @@
 package com.matan.blog.blog.service;
 
 import com.matan.blog.blog.dto.EditPostRequest;
+import com.matan.blog.blog.dto.EditUser;
 import com.matan.blog.blog.dto.PostRequest;
 import com.matan.blog.blog.dto.UserResponse;
 import com.matan.blog.blog.mapper.UserMapper;
@@ -8,6 +9,7 @@ import com.matan.blog.blog.model.Post;
 import com.matan.blog.blog.model.User;
 import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class UserService {
     private final AuthService authService;
     private final PostService postService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse userDetails() {
         User user = authService.getCurrentUser();
@@ -52,5 +55,17 @@ public class UserService {
 
     public void deleteUser() {
         userRepository.deleteById(authService.getCurrentUser().get_id());
+    }
+
+    public void EditUser(EditUser editUser) {
+        User user = authService.getCurrentUser();
+        if (!editUser.getEmail().equals(user.getEmail()))
+            user.setEmail(editUser.getEmail());
+        if (!editUser.getUsername().equals(user.getUsername()))
+            user.setUsername(editUser.getUsername());
+        if (!editUser.getPassword().isBlank())
+            user.setPassword(passwordEncoder.encode(editUser.getPassword()));
+
+        userRepository.save(user);
     }
 }

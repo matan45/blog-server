@@ -1,6 +1,7 @@
 package com.matan.blog.blog.controller;
 
 import com.matan.blog.blog.dto.EditPostRequest;
+import com.matan.blog.blog.dto.EditUser;
 import com.matan.blog.blog.dto.PostRequest;
 import com.matan.blog.blog.dto.UserResponse;
 import com.matan.blog.blog.service.UserService;
@@ -40,6 +41,12 @@ public class UserController {
     @GetMapping("profile")
     public ResponseEntity<UserResponse> getUserData() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.userDetails());
+    }
+
+    @PutMapping("profile/edit")
+    public ResponseEntity<String> editUser(@RequestBody EditUser editUser) {
+        userService.EditUser(editUser);
+        return ResponseEntity.status(HttpStatus.OK).body("User Edit Successfully!!");
     }
 
     @DeleteMapping("delete")
