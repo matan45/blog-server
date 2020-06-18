@@ -17,6 +17,8 @@ public class EditUser {
     @NotBlank
     @Email
     private String email;
+    @NotBlank
+    private String refreshToken;
 
     private String password;
 }

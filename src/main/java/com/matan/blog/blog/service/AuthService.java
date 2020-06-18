@@ -64,6 +64,15 @@ public class AuthService {
                 .email(refreshTokenRequest.getEmail()).build();
     }
 
+    public AuthenticationResponse editUser(RefreshTokenRequest refreshTokenRequest,String username) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtProvider.generateTokenWithEmail(refreshTokenRequest.getEmail());
+        return AuthenticationResponse.builder().authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis())).username(username)
+                .email(refreshTokenRequest.getEmail()).build();
+    }
+
     @Transactional(readOnly = true)
     public User getCurrentUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder

@@ -1,9 +1,6 @@
 package com.matan.blog.blog.controller;
 
-import com.matan.blog.blog.dto.EditPostRequest;
-import com.matan.blog.blog.dto.EditUser;
-import com.matan.blog.blog.dto.PostRequest;
-import com.matan.blog.blog.dto.UserResponse;
+import com.matan.blog.blog.dto.*;
 import com.matan.blog.blog.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,9 +41,8 @@ public class UserController {
     }
 
     @PutMapping("profile/edit")
-    public ResponseEntity<String> editUser(@RequestBody EditUser editUser) {
-        userService.EditUser(editUser);
-        return ResponseEntity.status(HttpStatus.OK).body("User Edit Successfully!!");
+    public ResponseEntity<AuthenticationResponse> editUser(@RequestBody EditUser editUser) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.EditUser(editUser));
     }
 
     @DeleteMapping("delete")

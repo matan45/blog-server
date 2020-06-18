@@ -1,9 +1,6 @@
 package com.matan.blog.blog.service;
 
-import com.matan.blog.blog.dto.EditPostRequest;
-import com.matan.blog.blog.dto.EditUser;
-import com.matan.blog.blog.dto.PostRequest;
-import com.matan.blog.blog.dto.UserResponse;
+import com.matan.blog.blog.dto.*;
 import com.matan.blog.blog.mapper.UserMapper;
 import com.matan.blog.blog.model.Post;
 import com.matan.blog.blog.model.User;
@@ -57,7 +54,7 @@ public class UserService {
         userRepository.deleteById(authService.getCurrentUser().get_id());
     }
 
-    public void EditUser(EditUser editUser) {
+    public AuthenticationResponse EditUser(EditUser editUser) {
         User user = authService.getCurrentUser();
         if (!editUser.getEmail().equals(user.getEmail()))
             user.setEmail(editUser.getEmail());
@@ -67,5 +64,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(editUser.getPassword()));
 
         userRepository.save(user);
+
+        return authService.editUser(new RefreshTokenRequest(editUser.getRefreshToken(),user.getEmail()),user.getUsername());
     }
 }
