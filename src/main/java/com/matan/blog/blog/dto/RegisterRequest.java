@@ -21,4 +21,6 @@ public class RegisterRequest {
     private String password;
     @NotBlank
     private String created;
+
+    private String token;
 }

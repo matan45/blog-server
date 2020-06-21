@@ -39,4 +39,9 @@ public class MvcExceptionHandler {
     public ResponseEntity<String> JwtExpiredExceptionHandler(JwtExpiredException ex) {
         return new ResponseEntity<>(ErrorCodes.jwtExpired + " " + ex.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(BotException.class)
+    public ResponseEntity<String> BotExpiredExceptionHandler(BotException ex) {
+        return new ResponseEntity<>(ErrorCodes.botExpired + " " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
