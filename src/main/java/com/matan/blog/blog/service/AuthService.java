@@ -97,7 +97,7 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
 
-    private void recaptcha(String token) {
+    public void recaptcha(String token) {
         String secretKey=env.getProperty("recaptcha.key");
         String recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify" +
                 "?secret=" +

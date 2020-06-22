@@ -19,5 +19,5 @@ public class CommentsController {
         commentService.createComment(commentsRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+//TODO: comment whit web socket
 }

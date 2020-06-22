@@ -12,6 +12,7 @@ import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +46,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts(int page) {
-        return postRepository.findAll(PageRequest.of(page, 20)).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
+        return postRepository.findAll(PageRequest.of(page, 10,Sort.by(Sort.Direction.ASC,"created"))).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

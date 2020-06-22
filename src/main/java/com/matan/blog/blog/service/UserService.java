@@ -55,6 +55,7 @@ public class UserService {
     }
 
     public AuthenticationResponse EditUser(EditUser editUser) {
+        authService.recaptcha(editUser.getToken());
         User user = authService.getCurrentUser();
         if (!editUser.getEmail().equals(user.getEmail()))
             user.setEmail(editUser.getEmail());
