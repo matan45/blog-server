@@ -10,6 +10,7 @@ import com.matan.blog.blog.repository.PostRepository;
 import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public class CommentService {
     @Transactional
     public void createComment(CommentsRequest commentsRequest) {
         Post post = postRepository.findById(commentsRequest.getPostId()).orElseThrow(() -> new PostNotFoundException("cant fined post whit that id: " + commentsRequest.getPostId()));
-        User user = authService.getCurrentUser();
+        User user = userRepository.findByEmail(commentsRequest.getUserEmail()).orElseThrow(() -> new UsernameNotFoundException("User name not found - " + commentsRequest.getUserEmail()));
         Comment comment = commentMapper.map(commentsRequest);
         user.setCommentsNumber(user.getCommentsNumber() + 1);
         if (post.getComments() == null) {

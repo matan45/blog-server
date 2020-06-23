@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     @Mapping(target = "_id", ignore = true)
-    @Mapping(target = "createdDate", expression = "java(commentsRequest.getCreateDate())")
+    @Mapping(target = "createdDate", expression = "java(commentsRequest.getCreatedDate())")
     @Mapping(target = "text", expression = "java(commentsRequest.getText())")
     @Mapping(target = "userName", expression = "java(commentsRequest.getUserName())")
     Comment map(CommentsRequest commentsRequest);

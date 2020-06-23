@@ -20,5 +20,7 @@ public class CommentsRequest {
     @NotBlank
     private String userName;
     @NotNull
-    private String createDate;
+    private String createdDate;
+    @NotBlank
+    private String userEmail;
 }

@@ -10,9 +10,7 @@ import com.matan.blog.blog.model.User;
 import com.matan.blog.blog.repository.PostRepository;
 import com.matan.blog.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +44,14 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts(int page) {
-        return postRepository.findAll(PageRequest.of(page, 10,Sort.by(Sort.Direction.ASC,"created"))).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
+        //get the post from the end of the array need to check
+        int listSize = postRepository.findAll().size();
+        int availablePage = (int) Math.floor((double) listSize / 10);
+        if ((availablePage - page) <= -1){
+            page=0;
+            availablePage += 1;
+        }
+        return postRepository.findAll(PageRequest.of(availablePage - page, 10/*, Sort.by(Sort.Direction.ASC, "created")*/)).stream().map(postMapper::mapToResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -76,10 +81,10 @@ public class PostService {
         Post editPost = postMapper.mapEdit(editPostRequest, oldPost);
 
         List<Post> list = user.getPosts();
-        if(list!= null){
-            for (int i=0;i<list.size();i++){
-                if(list.get(i).get_id().equals(oldPost.get_id())){
-                    list.set(i,editPost);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).get_id().equals(oldPost.get_id())) {
+                    list.set(i, editPost);
                     break;
                 }
             }
