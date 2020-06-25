@@ -63,13 +63,14 @@ public class PostService {
 
     @Transactional
     public void deletePostById(String id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("post not fined whit that id: " + id));
+        Post oldPost = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("post not fined whit that id: " + id));
         User user = authService.getCurrentUser();
         if (user.getPosts() != null) {
             List<Post> list = user.getPosts();
-            list.remove(post);
+            list.removeIf(post -> post.get_id().equals(oldPost.get_id()));
+
             user.setPosts(list);
-            postRepository.delete(post);
+            postRepository.delete(oldPost);
             userRepository.save(user);
         }
     }
