@@ -32,6 +32,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -104,7 +105,7 @@ public class AuthService {
                 secretKey +
                 "&response=" +
                 token;
-
+            log.info(recaptchaUrl);
         ResponseRecap data = builder.method(HttpMethod.POST)
                 .uri(URI.create(recaptchaUrl))
                 .accept(MediaType.APPLICATION_FORM_URLENCODED).retrieve().bodyToMono(ResponseRecap.class).block();
