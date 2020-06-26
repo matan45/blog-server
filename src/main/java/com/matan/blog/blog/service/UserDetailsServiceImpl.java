@@ -24,9 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
 
-        User user = userOptional
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("No user Found with email : " + email));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
